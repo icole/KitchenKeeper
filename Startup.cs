@@ -11,14 +11,21 @@ using KitchenStash.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using GraphQL.Server.Ui.Voyager;
+using KitchenStash.GraphQL;
+using Microsoft.Data.SqlClient;
 
 namespace KitchenStash
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+        private string _connection;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -26,9 +33,14 @@ namespace KitchenStash
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var builder = new SqlConnectionStringBuilder(
+            Configuration.GetConnectionString("DefaultConnection"))
+            {
+                Password = Configuration["DbPassword"]
+            };
+            _connection = builder.ConnectionString;
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(_connection));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -43,6 +55,10 @@ namespace KitchenStash
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddGraphQLServer()
+                    .AddQueryType<Query>()
+                    .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = _env.IsDevelopment()); ;
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -66,7 +82,7 @@ namespace KitchenStash
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
@@ -81,6 +97,13 @@ namespace KitchenStash
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapGraphQL();
+            });
+
+            app.UseGraphQLVoyager(new GraphQLVoyagerOptions()
+            {
+                GraphQLEndPoint = "/graphql",
+                Path = "/graphql-voyager"
             });
 
             app.UseSpa(spa =>

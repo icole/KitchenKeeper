@@ -17,5 +17,7 @@ namespace KitchenStash.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+
+        public DbSet<FoodItem> FoodItems { get; set; }
     }
 }
