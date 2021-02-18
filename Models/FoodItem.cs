@@ -11,9 +11,9 @@ namespace KitchenStash.Models
         public string Name { get; set; }
 
         [Required]
-        public double Quantity { get; set; }
+        public double Amount { get; set; }
 
-        public string Measurment { get; set; }
+        public string Unit { get; set; }
 
         public double Price { get; set; }
     }

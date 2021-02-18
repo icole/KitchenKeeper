@@ -196,7 +196,7 @@ namespace KitchenStash.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Measurment")
+                    b.Property<string>("Unit")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -206,7 +206,7 @@ namespace KitchenStash.Data.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<double>("Quantity")
+                    b.Property<double>("Amount")
                         .HasColumnType("float");
 
                     b.HasKey("Id");

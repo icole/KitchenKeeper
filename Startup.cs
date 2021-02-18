@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using GraphQL.Server.Ui.Voyager;
 using KitchenStash.GraphQL;
 using Microsoft.Data.SqlClient;
+using KitchenStash.GraphQL.FoodItems;
 
 namespace KitchenStash
 {
@@ -58,6 +59,8 @@ namespace KitchenStash
 
             services.AddGraphQLServer()
                     .AddQueryType<Query>()
+                    .AddMutationType<Mutation>()
+                    .AddType<FoodItemType>()
                     .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = _env.IsDevelopment()); ;
 
             // In production, the React files will be served from this directory
