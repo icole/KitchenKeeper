@@ -9,9 +9,10 @@ namespace KitchenStash.GraphQL
 {
     public class Mutation
     {
+        [UseDbContext(typeof(GraphqlDbContext))]
         public async Task<AddFoodItemPayload> AddFoodItemAsync(
             AddFoodItemInput input,
-            [Service] ApplicationDbContext context
+            [ScopedService] GraphqlDbContext context
         )
         {
             var foodItem = new FoodItem

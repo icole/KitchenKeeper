@@ -8,7 +8,8 @@ namespace KitchenStash.GraphQL
 {
     public class Query
     {
-        public IQueryable<FoodItem> GetFoodItems([Service] ApplicationDbContext context)
+        [UseDbContext(typeof(GraphqlDbContext))]
+        public IQueryable<FoodItem> GetFoodItems([ScopedService] GraphqlDbContext context)
         {
             return context.FoodItems;
         }

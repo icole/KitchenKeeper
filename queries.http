@@ -1,0 +1,15 @@
+POST http://localhost:5000/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+  a: foodItems {
+    name
+  }
+  b: foodItems {
+    name
+  }
+  c: foodItems {
+    name
+  }
+}

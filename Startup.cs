@@ -43,6 +43,9 @@ namespace KitchenStash
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(_connection));
 
+            services.AddPooledDbContextFactory<GraphqlDbContext>(options =>
+                options.UseSqlServer(_connection));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)

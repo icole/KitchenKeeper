@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 
 namespace KitchenStash.Data
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class GraphqlDbContext : DbContext
     {
-        public ApplicationDbContext(
-            DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+        public GraphqlDbContext(
+            DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<FoodItem> FoodItems { get; set; }
     }
 }
