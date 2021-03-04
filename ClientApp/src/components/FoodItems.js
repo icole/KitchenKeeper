@@ -19,7 +19,11 @@ const FOOD_ITEMS = gql`
 
 function FoodItems() {
   const [foodItems, setFoodItems] = useState([]);
-  const { loading, error, data } = useQuery(FOOD_ITEMS);
+  const { loading, error } = useQuery(FOOD_ITEMS, {
+    onCompleted: (data) => {
+      if (data?.foodItems) setFoodItems(data.foodItems);
+    },
+  });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
@@ -28,37 +32,24 @@ function FoodItems() {
     setFoodItems([...foodItems, { id: nanoid(), editMode: true }]);
   };
 
-  const cancelItemEdit = (item) => {
+  const updateItem = (oldItem, newItem) => {
     setFoodItems(
       foodItems.map((i) => {
-        if (i.id === item.id) {
-          i.editMode = false;
+        if (i.id === oldItem.id) {
+          return newItem;
         }
         return i;
       })
     );
   };
 
-  const cancelNewItem = (item) => {
+  const cancelCreateItem = (item) => {
     setFoodItems(foodItems.filter((i) => i.id !== item.id));
   };
 
   return (
     <Card body>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <div>
-          <h1 id="tabelLabel">Food Items</h1>
-        </div>
-        <div>
-          <Button
-            color="primary"
-            onClick={addNewItem}
-            style={{ marginLeft: "1em" }}
-          >
-            + Add Item
-          </Button>
-        </div>
-      </div>
+      <h1 id="tabelLabel">Food Items</h1>
       <Table className="table" aria-labelledby="tabelLabel">
         <thead>
           <tr>
@@ -74,7 +65,8 @@ function FoodItems() {
               <FoodItemForm
                 key={item.id}
                 item={item}
-                onCancel={cancelNewItem}
+                onCreateCancel={cancelCreateItem}
+                onUpdate={updateItem}
               />
             ) : (
               <tr key={item.id}>
@@ -89,6 +81,13 @@ function FoodItems() {
           )}
         </tbody>
       </Table>
+      <Button
+        color="primary"
+        onClick={addNewItem}
+        style={{ marginLeft: "1em" }}
+      >
+        + Add Item
+      </Button>
     </Card>
   );
 }
