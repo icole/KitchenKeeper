@@ -3,10 +3,7 @@ import { Input } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
-function FoodItemForm(item) {
-  const cancelEdit = (item) => {
-    item.editMode = false;
-  };
+function FoodItemForm({ item, onCancel }) {
   return (
     <tr key={item.id}>
       <td>
@@ -22,10 +19,7 @@ function FoodItemForm(item) {
         <Input style={{ width: "70%" }} />
       </td>
       <td>
-        <FontAwesomeIcon
-          onClick={() => cancelEdit(item)}
-          icon={faTimesCircle}
-        />
+        <FontAwesomeIcon onClick={() => onCancel(item)} icon={faTimesCircle} />
       </td>
     </tr>
   );

@@ -28,6 +28,21 @@ function FoodItems() {
     setFoodItems([...foodItems, { id: nanoid(), editMode: true }]);
   };
 
+  const cancelItemEdit = (item) => {
+    setFoodItems(
+      foodItems.map((i) => {
+        if (i.id === item.id) {
+          i.editMode = false;
+        }
+        return i;
+      })
+    );
+  };
+
+  const cancelNewItem = (item) => {
+    setFoodItems(foodItems.filter((i) => i.id !== item.id));
+  };
+
   return (
     <Card body>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -56,7 +71,11 @@ function FoodItems() {
         <tbody>
           {foodItems.map((item) =>
             item.editMode ? (
-              <FoodItemForm key={item.id} item={item} />
+              <FoodItemForm
+                key={item.id}
+                item={item}
+                onCancel={cancelNewItem}
+              />
             ) : (
               <tr key={item.id}>
                 <td>{item.name}</td>
