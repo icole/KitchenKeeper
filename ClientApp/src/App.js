@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route } from "react-router";
+import { Route, Redirect } from "react-router";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { Layout } from "./components/Layout";
 import { Home } from "./components/Home";
@@ -24,12 +24,12 @@ export default class App extends Component {
         }
       >
         <Layout>
-          <Route exact path="/" component={Home} />
           <AuthorizeRoute path="/food-items" component={FoodItems} />
           <Route
             path={ApplicationPaths.ApiAuthorizationPrefix}
             component={ApiAuthorizationRoutes}
           />
+          <Redirect from="/*" to="/food-items"/>
         </Layout>
       </ApolloProvider>
     );
